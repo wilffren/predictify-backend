@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-  # Servicio de Base de Datos (PostgreSQL)
   db:
     image: postgres:16-alpine
     container_name: predictify_db_container
@@ -17,7 +14,6 @@ services:
     networks:
       - predictify-network
 
-  # Servicio de Interfaz Gráfica (pgAdmin 4)
   pgadmin:
     image: dpage/pgadmin4
     container_name: predictify_pgadmin
