@@ -1,102 +1,102 @@
-# Predictify Backend - Sistema de Gestión de Eventos con IA
+# Predictify Backend - AI-Powered Event Management System
 
-API REST para gestión de eventos con predicciones de asistencia basadas en Inteligencia Artificial.
+REST API for event management with attendance predictions based on Artificial Intelligence.
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
 - **Framework**: Spring Boot 3.4.0
-- **Base de Datos**: PostgreSQL 17
-- **Autenticación**: JWT (JSON Web Tokens)
-- **ORM**: Hibernate/JPA con UUID como PKs
-- **Documentación**: OpenAPI/Swagger UI
+- **Database**: PostgreSQL 17
+- **Authentication**: JWT (JSON Web Tokens)
+- **ORM**: Hibernate/JPA with UUIDs as PKs
+- **Documentation**: OpenAPI/Swagger UI
 
-## 🚀 Levantar el Proyecto
+## 🚀 Project Setup
 
-### 1. Iniciar Base de Datos
+### 1. Start Database
 
 ```bash
 docker-compose up -d
 ```
 
-Esto iniciará:
-- PostgreSQL 17 en puerto 5435
-- pgAdmin en http://localhost:5050
+This will start:
+- PostgreSQL 17 on port 5435
+- pgAdmin at http://localhost:5050
 
-### 2. Ejecutar Backend
+### 2. Run Backend
 
 ```bash
 mvn spring-boot:run
 ```
 
-La API estará disponible en: **http://localhost:8081**
+The API will be available at: **http://localhost:8081**
 
-### 3. Documentación API
+### 3. API Documentation
 
 Swagger UI: **http://localhost:8081/swagger-ui.html**
 
-## 📡 Endpoints Principales
+## 📡 Main Endpoints
 
-### Autenticación
+### Authentication
 
-| Método | Endpoint | Descripción |
+| Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/auth/register` | Registrar nuevo usuario |
-| POST | `/api/auth/login` | Iniciar sesión |
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Log in |
 
-### Eventos
+### Events
 
-| Método | Endpoint | Descripción | Rol Requerido |
+| Method | Endpoint | Description | Required Role |
 |--------|----------|-------------|---------------|
-| GET | `/api/events` | Listar eventos publicados | Público |
-| GET | `/api/events/upcoming` | Eventos próximos | Público |
-| GET | `/api/events/featured` | Eventos destacados | Público |
-| GET | `/api/events/trending` | Eventos en tendencia | Público |
-| GET | `/api/events/{slug}` | Detalle de evento | Público |
-| POST | `/api/events` | Crear evento | ORGANIZER, ADMIN |
-| PUT | `/api/events/{id}` | Actualizar evento | ORGANIZER (propio), ADMIN |
-| DELETE | `/api/events/{id}` | Eliminar evento | ORGANIZER (propio), ADMIN |
-| POST | `/api/events/{id}/publish` | Publicar evento | ORGANIZER (propio), ADMIN |
+| GET | `/api/events` | List published events | Public |
+| GET | `/api/events/upcoming` | Upcoming events | Public |
+| GET | `/api/events/featured` | Featured events | Public |
+| GET | `/api/events/trending` | Trending events | Public |
+| GET | `/api/events/{slug}` | Event details | Public |
+| POST | `/api/events` | Create event | ORGANIZER, ADMIN |
+| PUT | `/api/events/{id}` | Update event | ORGANIZER (own), ADMIN |
+| DELETE | `/api/events/{id}` | Delete event | ORGANIZER (own), ADMIN |
+| POST | `/api/events/{id}/publish` | Publish event | ORGANIZER (own), ADMIN |
 
-### Registros de Asistencia
+### Attendance Registrations
 
-| Método | Endpoint | Descripción | Rol Requerido |
+| Method | Endpoint | Description | Required Role |
 |--------|----------|-------------|---------------|
-| POST | `/api/events/{eventId}/register` | Registrarse a evento | ATTENDEE, ORGANIZER, ADMIN |
-| DELETE | `/api/events/{eventId}/register` | Cancelar registro | ATTENDEE, ORGANIZER, ADMIN |
-| GET | `/api/events/{eventId}/registrations` | Ver registros | ORGANIZER (propio), ADMIN |
-| POST | `/api/events/{eventId}/interested` | Marcar interés | ATTENDEE, ORGANIZER, ADMIN |
+| POST | `/api/events/{eventId}/register` | Register for event | ATTENDEE, ORGANIZER, ADMIN |
+| DELETE | `/api/events/{eventId}/register` | Cancel registration | ATTENDEE, ORGANIZER, ADMIN |
+| GET | `/api/events/{eventId}/registrations` | View registrations | ORGANIZER (own), ADMIN |
+| POST | `/api/events/{eventId}/interested` | Mark as interested | ATTENDEE, ORGANIZER, ADMIN |
 
-### Predicciones
+### Predictions
 
-| Método | Endpoint | Descripción | Rol Requerido |
+| Method | Endpoint | Description | Required Role |
 |--------|----------|-------------|---------------|
-| GET | `/api/events/{id}/prediction` | Obtener predicción | ATTENDEE, ORGANIZER, ADMIN |
-| POST | `/api/events/{id}/prediction/generate` | Generar predicción | ORGANIZER (propio), ADMIN |
+| GET | `/api/events/{id}/prediction` | Get prediction | ATTENDEE, ORGANIZER, ADMIN |
+| POST | `/api/events/{id}/prediction/generate` | Generate prediction | ORGANIZER (own), ADMIN |
 
-### Usuarios
+### Users
 
-| Método | Endpoint | Descripción | Rol Requerido |
+| Method | Endpoint | Description | Required Role |
 |--------|----------|-------------|---------------|
-| GET | `/api/users/me` | Perfil del usuario actual | Autenticado |
-| PUT | `/api/users/me` | Actualizar perfil | Autenticado |
-| GET | `/api/users/me/events` | Mis eventos registrados | Autenticado |
+| GET | `/api/users/me` | Current user profile | Authenticated |
+| PUT | `/api/users/me` | Update profile | Authenticated |
+| GET | `/api/users/me/events` | My registered events | Authenticated |
 
-### Organizadores
+### Organizers
 
-| Método | Endpoint | Descripción | Rol Requerido |
+| Method | Endpoint | Description | Required Role |
 |--------|----------|-------------|---------------|
-| POST | `/api/organizers/profile` | Crear perfil organizador | ORGANIZER, ADMIN |
-| GET | `/api/organizers/{id}` | Ver perfil organizador | Público |
+| POST | `/api/organizers/profile` | Create organizer profile | ORGANIZER, ADMIN |
+| GET | `/api/organizers/{id}` | View organizer profile | Public |
 
-## 🔐 Autenticación
+## 🔐 Authentication
 
-Todos los endpoints protegidos requieren el header:
+All protected endpoints require the header:
 
 ```
 Authorization: Bearer {token}
 ```
 
-### Ejemplo de Login
+### Login Example
 
 ```bash
 curl -X POST http://localhost:8081/api/auth/login \
@@ -107,7 +107,7 @@ curl -X POST http://localhost:8081/api/auth/login \
   }'
 ```
 
-Respuesta:
+Response:
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
@@ -115,51 +115,51 @@ Respuesta:
 }
 ```
 
-## 👥 Roles de Usuario
+## 👥 User Roles
 
-### ATTENDEE (Usuario Normal)
-- Ver eventos publicados
-- Registrarse a eventos
-- Guardar eventos favoritos
-- Ver predicciones
+### ATTENDEE (Regular User)
+- View published events
+- Register for events
+- Save favorite events
+- View predictions
 
-### ORGANIZER (Organizador)
-- Todo lo de ATTENDEE
-- Crear y gestionar eventos propios
-- Ver analytics de eventos propios
-- Generar predicciones
+### ORGANIZER (Organizer)
+- Everything included in ATTENDEE
+- Create and manage own events
+- View analytics for own events
+- Generate predictions
 
-### ADMIN (Administrador)
-- Acceso total al sistema
-- Gestionar cualquier evento
-- Verificar organizadores
-- Ver analytics globales
+### ADMIN (Administrator)
+- Full system access
+- Manage any event
+- Verify organizers
+- View global analytics
 
-## 🗄️ Base de Datos
+## 🗄️ Database
 
-El esquema completo se encuentra en `src/main/resources/schema.sql`
+The complete schema can be found in `src/main/resources/schema.sql`
 
-### Tablas Principales
-- **users**: Gestión de usuarios
-- **events**: Eventos del sistema
-- **event_registrations**: Registros de asistencia
-- **event_predictions**: Predicciones de IA
-- **organizers**: Perfiles de organizadores
-- **permissions**: Sistema de permisos
-- **protected_routes**: Configuración de rutas frontend
+### Main Tables
+- **users**: User management
+- **events**: System events
+- **event_registrations**: Attendance registrations
+- **event_predictions**: AI predictions
+- **organizers**: Organizer profiles
+- **permissions**: Permission system
+- **protected_routes**: Frontend route configuration
 
-Total: 33+ tablas con relaciones complejas
+Total: 33+ tables with complex relationships
 
-## 🧪 Datos de Prueba
+## 🧪 Test Data
 
-El archivo `schema.sql` incluye:
-- 14 fact ores de predicción predefinidos
-- 40+ permisos del sistema
-- 20+ rutas protegidas configuradas
+The `schema.sql` file includes:
+- 14 predefined prediction factors
+- 40+ system permissions
+- 20+ configured protected routes
 
-## 🌐 Integración con Frontend Angular
+## 🌐 Angular Frontend Integration
 
-### Headers Requeridos
+### Required Headers
 
 ```typescript
 const headers = {
@@ -168,7 +168,7 @@ const headers = {
 };
 ```
 
-### Servicios Recomendados
+### Recommended Services
 
 ```typescript
 // auth.service.ts
@@ -192,7 +192,7 @@ class PermissionsService {
 }
 ```
 
-### Guards para Rutas
+### Route Guards
 
 ```typescript
 @Injectable()
@@ -211,26 +211,26 @@ export class RoleGuard implements CanActivate {
 }
 ```
 
-## 📊 Predicciones con IA
+## 📊 AI Predictions
 
-El sistema utiliza múltiples factores para predecir asistencia:
+The system uses multiple factors to predict attendance:
 
-### Factores Positivos
-- Alto engagement (interesados vs capacidad)
-- Tema trending
-- Organizador verificado  
-- Registros anticipados
-- Buen historial del organizador
+### Positive Factors
+- High engagement (interested vs. capacity)
+- Trending topic
+- Verified organizer
+- Early registrations
+- Good organizer history
 
-### Factores Negativos
-- Evento gratuito (mayor no-show)
-- Eventos competidores en la misma fecha
-- Mal clima previsto
-- Temporada de vacaciones
+### Negative Factors
+- Free event (higher no-show rate)
+- Competing events on the same date
+- Poor forecasted weather
+- Holiday season
 
-## 🔧 Configuración
+## 🔧 Configuration
 
-### Variables de Entorno
+### Environment Variables
 
 ```properties
 # Database
@@ -246,7 +246,7 @@ JWT_EXPIRATION=86400000
 GEMINI_API_KEY=your-api-key
 ```
 
-## 📝 Modelos de Datos (DTOs)
+## 📝 Data Models (DTOs)
 
 ### RegisterRequest
 ```json
@@ -262,7 +262,7 @@ GEMINI_API_KEY=your-api-key
 ```json
 {
   "title": "Angular Workshop 2024",
-  "description": "Aprende Angular desde cero",
+  "description": "Learn Angular from scratch",
   "category": "WORKSHOP",
   "type": "PRESENCIAL",
   "startDate": "2024-12-20",
@@ -281,26 +281,26 @@ GEMINI_API_KEY=your-api-key
 
 ## 🐛 Troubleshooting
 
-### Base de Datos no Inicia
+### Database Won't Start
 ```bash
 docker-compose down
 docker volume rm predictify-backend_postgres_data_secure
 docker-compose up -d
 ```
 
-### Puerto 8081 en Uso
-Cambiar en `application.yml`:
+### Port 8081 in Use
+Change in `application.yml`:
 ```yaml
 server:
   port: 8082
 ```
 
-### Compilación Falla
+### Compilation Fails
 ```bash
 mvn clean install -DskipTests
 ```
 
-## 📚 Stack Tecnológico
+## 📚 Tech Stack
 
 - Java 21
 - Spring Boot 3.4.0
@@ -313,22 +313,22 @@ mvn clean install -DskipTests
 - Maven
 - Docker & Docker Compose
 
-## 🤝 Contribución
+## 🤝 Contribution
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT.
+This project is licensed under the MIT License.
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **PredictifyLabs Team**
 
 ---
 
-**Nota**: Este backend está diseñado para trabajar con un frontend Angular que consume estos endpoints.
+**Note**: This backend is designed to work with an Angular frontend that consumes these endpoints.
